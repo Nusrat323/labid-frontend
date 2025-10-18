@@ -1,9 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom"; 
 
 export default function GalleryCard({ type, title, coverSrc, link, buttonText }) {
   return (
-    <a
-      href={link}
+    <Link
+      to={link} // ✅ Use 'to' instead of 'href' for SPA navigation
       className="group relative block overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition duration-500"
     >
       {/* Cover Image */}
@@ -21,11 +22,11 @@ export default function GalleryCard({ type, title, coverSrc, link, buttonText })
         <h3 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg mb-4">
           {title}
         </h3>
-        
+
         <span className="px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-full transition">
           {buttonText}
         </span>
       </div>
-    </a>
+    </Link>
   );
 }
