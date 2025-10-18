@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-t from-stone-900 via-stone-800 to-stone-700 text-white py-12 mt-12">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Brand / About */}
+        
         <div>
           <h2 className="text-2xl font-bold mb-4">Labid Khan</h2>
           <p className="text-gray-300 text-sm">
@@ -14,9 +14,9 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Quick Links */}
+       
         <div>
-          <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
+          <h3 className="text-xl font-semibold mb-5">Quick Links</h3>
           <ul className="space-y-2">
             <li>
               <Link to="/" className="hover:text-yellow-500 transition">
