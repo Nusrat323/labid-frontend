@@ -7,7 +7,7 @@ export default function GalleryCard({ type, title, coverSrc, link, buttonText })
       to={link} 
       className="group relative block overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition duration-500"
     >
-      {/* Cover Image */}
+      
       <img
         src={coverSrc}
         alt={title}
