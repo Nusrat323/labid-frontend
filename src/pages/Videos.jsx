@@ -132,7 +132,7 @@ export default function Videos() {
               onMouseLeave={(e) => e.target.removeAttribute("controls")}
             />
 
-            {/* Play Overlay Icon */}
+           
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +153,7 @@ export default function Videos() {
         ))}
       </div>
 
-      {/* Pagination Buttons */}
+      
       <div className="flex justify-center mt-10 gap-2 flex-wrap">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
@@ -170,7 +170,7 @@ export default function Videos() {
         ))}
       </div>
 
-      {/* Lightbox View */}
+      
       {lightboxIndex !== null && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
           <button

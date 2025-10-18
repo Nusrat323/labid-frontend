@@ -37,7 +37,7 @@ export default function Admin() {
     if (activeSection === "manage") fetchMedia();
   }, [activeSection]);
 
-  // Delete media
+  
   const handleDelete = async (id, mediaType) => {
     const result = await Swal.fire({
       title: "Are you sure?",
