@@ -14,7 +14,6 @@ export default function App() {
   const location = useLocation();
   const isContactPage = location.pathname === "/contact"; 
 
-  // Simple auth check for admin route
   const isAdminLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
 
   return (
@@ -28,28 +27,12 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/lifestyle" element={<Lifestyle />} />
           <Route path="/contact" element={<Contact />} />
-
-          {/* Admin login page */}
           <Route path="/admin-login" element={<AdminLogin />} />
-
-          {/* Protected Admin page */}
-          <Route
-            path="/admin"
-            element={isAdminLoggedIn ? <Admin /> : <Navigate to="/admin-login" />}
-          />
-
-          {/* Optional: catch all unmatched routes */}
+          <Route path="/admin" element={isAdminLoggedIn ? <Admin /> : <Navigate to="/admin-login" />} />
           <Route path="*" element={<p className="text-center text-white p-8">Page not found</p>} />
         </Routes>
       </main>
-
-      {/* Render Footer only if not on Contact page */}
       {!isContactPage && <Footer />}
     </div>
   );
 }
-
-
-
-
-

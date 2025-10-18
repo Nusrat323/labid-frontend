@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function GalleryCard({ type, title, coverSrc, link, buttonText }) {
   return (
     <Link
-      to={link} // ✅ Use 'to' instead of 'href' for SPA navigation
+      to={link} 
       className="group relative block overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition duration-500"
     >
       {/* Cover Image */}

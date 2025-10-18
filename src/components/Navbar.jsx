@@ -9,7 +9,6 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Auto-close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -20,27 +19,23 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Check if admin is logged in
   useEffect(() => {
     const loggedIn = localStorage.getItem("adminLoggedIn");
     setIsAdminLoggedIn(!!loggedIn);
   }, [location.pathname]);
 
-  // Logout handler
   const handleLogout = () => {
     localStorage.removeItem("adminLoggedIn");
     setIsAdminLoggedIn(false);
     navigate("/");
   };
 
-  // Determine if current page is home or contact
   const isHome = location.pathname === "/";
   const isContact = location.pathname === "/contact";
 
   return (
     <nav className="navbar absolute top-0 left-0 w-full z-50 bg-transparent">
       <div className="container mx-auto flex justify-between items-center px-6 py-4">
-        {/* Left: Name */}
         <Link
           to="/"
           className="text-2xl font-extrabold tracking-wide uppercase text-white"
@@ -48,7 +43,7 @@ export default function Navbar() {
           Labid Khan
         </Link>
 
-        {/* Right: Menu for large screens */}
+        {/* Large screens */}
         <div className="hidden md:flex items-center space-x-6">
           <NavLink
             to="/"
@@ -69,6 +64,14 @@ export default function Navbar() {
             Photography
           </NavLink>
           <NavLink
+            to="/videos"
+            className={({ isActive }) =>
+              `text-lg font-medium text-white ${isActive ? "underline underline-offset-8" : "hover:underline underline-offset-8"}`
+            }
+          >
+            Videos
+          </NavLink>
+          <NavLink
             to="/lifestyle"
             className={({ isActive }) =>
               `text-lg font-medium text-white ${isActive ? "underline underline-offset-8" : "hover:underline underline-offset-8"}`
@@ -85,7 +88,6 @@ export default function Navbar() {
             About
           </NavLink>
 
-          {/* Let's Talk Button: hidden on Contact page */}
           {!isContact && (
             <Link
               to="/contact"
@@ -95,7 +97,6 @@ export default function Navbar() {
             </Link>
           )}
 
-          {/* Admin Section */}
           {isAdminLoggedIn ? (
             <>
               <Link
@@ -121,7 +122,7 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Hamburger menu for small screens */}
+        {/* Hamburger menu */}
         <div className="md:hidden relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -140,34 +141,11 @@ export default function Navbar() {
 
           {menuOpen && (
             <div className="absolute right-0 mt-3 w-48 bg-white/10 backdrop-blur-md text-white rounded-xl shadow-lg py-3 text-center">
-              <NavLink
-                to="/"
-                onClick={() => setMenuOpen(false)}
-                className="block px-4 py-2 hover:bg-white/20"
-              >
-                Home
-              </NavLink>
-              <NavLink
-                to="/photos"
-                onClick={() => setMenuOpen(false)}
-                className="block px-4 py-2 hover:bg-white/20"
-              >
-                Photography
-              </NavLink>
-              <NavLink
-                to="/lifestyle"
-                onClick={() => setMenuOpen(false)}
-                className="block px-4 py-2 hover:bg-white/20"
-              >
-                Lifestyle
-              </NavLink>
-              <NavLink
-                to="/about"
-                onClick={() => setMenuOpen(false)}
-                className="block px-4 py-2 hover:bg-white/20"
-              >
-                About
-              </NavLink>
+              <NavLink to="/" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-white/20">Home</NavLink>
+              <NavLink to="/photos" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-white/20">Photography</NavLink>
+              <NavLink to="/videos" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-white/20">Videos</NavLink>
+              <NavLink to="/lifestyle" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-white/20">Lifestyle</NavLink>
+              <NavLink to="/about" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-white/20">About</NavLink>
 
               {!isContact && (
                 <Link
@@ -181,28 +159,11 @@ export default function Navbar() {
 
               {isAdminLoggedIn ? (
                 <>
-                  <Link
-                    to="/admin"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2 mt-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg"
-                  >
-                    Dashboard
-                  </Link>
-                  <button
-                    onClick={() => { handleLogout(); setMenuOpen(false); }}
-                    className="block px-4 py-2 mt-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg"
-                  >
-                    Logout
-                  </button>
+                  <Link to="/admin" onClick={() => setMenuOpen(false)} className="block px-4 py-2 mt-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg">Dashboard</Link>
+                  <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="block px-4 py-2 mt-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg">Logout</button>
                 </>
               ) : (
-                <Link
-                  to="/admin-login"
-                  onClick={() => setMenuOpen(false)}
-                  className="block px-4 py-2 mt-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-lg"
-                >
-                  Admin Login
-                </Link>
+                <Link to="/admin-login" onClick={() => setMenuOpen(false)} className="block px-4 py-2 mt-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-lg">Admin Login</Link>
               )}
             </div>
           )}
@@ -211,5 +172,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
-
