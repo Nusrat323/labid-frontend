@@ -9,7 +9,7 @@ export default function Lifestyle() {
   const [fade, setFade] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
-  const API_URL = import.meta.env.VITE_API_URL; // backend URL
+  const API_URL = import.meta.env.VITE_API_URL; 
 
   // Static sample Lifestyle images
   const sampleLifestyle = [

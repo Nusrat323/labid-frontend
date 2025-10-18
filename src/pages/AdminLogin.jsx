@@ -18,7 +18,7 @@ export default function AdminLogin() {
     if (username === ADMIN_USER && password === ADMIN_PASS) {
       // Successful login
       localStorage.setItem("adminLoggedIn", "true");
-      navigate("/admin"); // Redirect to Admin Dashboard
+      navigate("/admin"); 
     } else {
       setError("Invalid username or password");
     }
