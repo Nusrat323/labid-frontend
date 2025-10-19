@@ -217,6 +217,8 @@ export default function UploadForm({ type, onUpload }) {
 
       await axios.post(url, formData, {
         headers: { "Content-Type": "multipart/form-data" },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
       });
 
       setFile(null);
@@ -349,4 +351,3 @@ export default function UploadForm({ type, onUpload }) {
     </>
   );
 }
-

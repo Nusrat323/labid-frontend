@@ -219,16 +219,13 @@ export default function Videos() {
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-  // Categories
   const videoCategories = ["All", "Lifestyle", "Travel", "Nature", "City"];
 
-  // Static videos
   const staticVideos = [
     { src: "/videos/vid1.mp4", cover: "/vidcov1.webp", category: "City" },
     { src: "/videos/vid2.mp4", cover: "/vidcov2.jpg", category: "Lifestyle" },
   ];
 
-  // Fetch uploaded videos from backend
   useEffect(() => {
     fetch(`${API_URL}/api/videos`)
       .then((res) => res.json())
@@ -249,13 +246,11 @@ export default function Videos() {
       .catch(() => setVideos(staticVideos));
   }, []);
 
-  // Filter by category
   const filteredVideos =
     selectedCategory === "All"
       ? videos
       : videos.filter((v) => v.category === selectedCategory);
 
-  // Responsive videos per page
   useEffect(() => {
     const handleResize = () => setVideosPerPage(window.innerWidth < 768 ? 4 : 6);
     handleResize();
@@ -263,7 +258,6 @@ export default function Videos() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Pagination
   const indexOfLastVideo = currentPage * videosPerPage;
   const indexOfFirstVideo = indexOfLastVideo - videosPerPage;
   const currentVideos = filteredVideos.slice(indexOfFirstVideo, indexOfLastVideo);
@@ -278,7 +272,6 @@ export default function Videos() {
     }, 200);
   };
 
-  // Lightbox
   const openLightbox = (index) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
   const showPrev = () => setLightboxIndex((prev) => (prev === 0 ? filteredVideos.length - 1 : prev - 1));
@@ -290,10 +283,7 @@ export default function Videos() {
         {videoCategories.map((cat) => (
           <button
             key={cat}
-            onClick={() => {
-              setSelectedCategory(cat);
-              setCurrentPage(1);
-            }}
+            onClick={() => { setSelectedCategory(cat); setCurrentPage(1); }}
             className={`px-5 py-2 rounded-full font-semibold transition ${
               selectedCategory === cat
                 ? "bg-yellow-500 text-gray-900"
@@ -324,7 +314,6 @@ export default function Videos() {
         ))}
       </div>
 
-      {/* Pagination */}
       <div className="flex justify-center mt-10 gap-2 flex-wrap">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
@@ -339,7 +328,6 @@ export default function Videos() {
         ))}
       </div>
 
-      {/* Lightbox */}
       {lightboxIndex !== null && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
           <button onClick={closeLightbox} className="absolute top-5 right-5 text-3xl text-white hover:text-yellow-500 transition font-bold">&times;</button>

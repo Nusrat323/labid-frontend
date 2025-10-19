@@ -360,7 +360,7 @@ export default function Admin() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                   {photos.map((p) => (
                     <div key={p._id} className="bg-white/10 backdrop-blur-md p-2 rounded-lg relative">
-                      <img src={`${API_URL}${p.url}`} alt="photo" className="w-full h-32 object-cover rounded" />
+                      <img src={p.url.startsWith("http") ? p.url : `${API_URL}${p.url}`} alt="photo" className="w-full h-32 object-cover rounded" />
                       <p className="text-sm mt-1 font-semibold">{p.category}</p>
                       <button
                         onClick={() => handleDelete(p._id, "photo")}
@@ -385,8 +385,8 @@ export default function Admin() {
                   {videos.map((v) => (
                     <div key={v._id} className="bg-white/10 backdrop-blur-md p-2 rounded-lg relative">
                       <video
-                        src={`${API_URL}${v.url}`}
-                        poster={v.thumbnailUrl ? `${API_URL}${v.thumbnailUrl}` : ""}
+                        src={v.url.startsWith("http") ? v.url : `${API_URL}${v.url}`}
+                        poster={v.thumbnailUrl ? (v.thumbnailUrl.startsWith("http") ? v.thumbnailUrl : `${API_URL}${v.thumbnailUrl}`) : ""}
                         controls
                         className="w-full h-32 object-cover rounded"
                       />
@@ -413,7 +413,7 @@ export default function Admin() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                   {lifestyle.map((l) => (
                     <div key={l._id} className="bg-white/10 backdrop-blur-md p-2 rounded-lg relative">
-                      <img src={`${API_URL}${l.url}`} alt="lifestyle" className="w-full h-32 object-cover rounded" />
+                      <img src={l.url.startsWith("http") ? l.url : `${API_URL}${l.url}`} alt="lifestyle" className="w-full h-32 object-cover rounded" />
                       <button
                         onClick={() => handleDelete(l._id, "lifestyle")}
                         className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm"
@@ -433,4 +433,3 @@ export default function Admin() {
     </div>
   );
 }
-
