@@ -1,3 +1,6 @@
+
+
+//works perfectly except video
 {/*import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -40,6 +43,8 @@ export default function UploadForm({ type, onUpload }) {
 
       await axios.post(url, formData, {
         headers: { "Content-Type": "multipart/form-data" },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
       });
 
       setFile(null);
@@ -98,7 +103,7 @@ export default function UploadForm({ type, onUpload }) {
           />
         </div>
 
-        
+       
         {file && (
           <div className="mb-4 relative">
             {type === "photo" || type === "lifestyle" ? (
@@ -175,6 +180,7 @@ export default function UploadForm({ type, onUpload }) {
 
 
 
+
 import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -187,6 +193,9 @@ export default function UploadForm({ type, onUpload }) {
   const [uploading, setUploading] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL;
+  const CLOUD_NAME = import.meta.env.VITE_CLOUD_NAME;
+  const UPLOAD_PRESET = import.meta.env.VITE_CLOUD_UPLOAD_PRESET;
+  const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
 
   const handleFileChange = (e) => setFile(e.target.files[0]);
   const handleThumbnailChange = (e) => setThumbnail(e.target.files[0]);
@@ -200,26 +209,59 @@ export default function UploadForm({ type, onUpload }) {
     if (type === "video" && !thumbnail) return toast.warning("Please upload a thumbnail.");
     if (!category && type !== "lifestyle") return toast.warning("Please select a category.");
 
-    const formData = new FormData();
-    formData.append("file", file);
-    if (type !== "lifestyle") formData.append("category", category);
-    if (type === "video" && thumbnail) formData.append("thumbnail", thumbnail);
-
     try {
       setUploading(true);
 
-      const url =
-        type === "photo"
-          ? `${API_URL}/api/photos/upload`
-          : type === "video"
-          ? `${API_URL}/api/videos/upload`
-          : `${API_URL}/api/lifestyle/upload`;
+      // 1️⃣ Video upload handled differently
+      if (type === "video") {
+        // Upload video
+        const videoData = new FormData();
+        videoData.append("file", file);
+        videoData.append("upload_preset", UPLOAD_PRESET);
+        videoData.append("folder", "videos");
 
-      await axios.post(url, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity
-      });
+        const videoRes = await axios.post(CLOUDINARY_URL, videoData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        // Upload thumbnail
+        let thumbnailRes = null;
+        if (thumbnail) {
+          const thumbData = new FormData();
+          thumbData.append("file", thumbnail);
+          thumbData.append("upload_preset", UPLOAD_PRESET);
+          thumbData.append("folder", "thumbnails");
+
+          thumbnailRes = await axios.post(CLOUDINARY_URL, thumbData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+        }
+
+        // Save metadata to backend
+        const metadata = {
+          url: videoRes.data.secure_url,
+          public_id: videoRes.data.public_id,
+          thumbnailUrl: thumbnailRes ? thumbnailRes.data.secure_url : null,
+          thumbnail_public_id: thumbnailRes ? thumbnailRes.data.public_id : null,
+          category,
+        };
+
+        await axios.post(`${API_URL}/api/videos/metadata`, metadata);
+      } else {
+        // Photo or lifestyle upload
+        const formData = new FormData();
+        formData.append("file", file);
+        if (type !== "lifestyle") formData.append("category", category);
+
+        const url =
+          type === "photo"
+            ? `${API_URL}/api/photos/upload`
+            : `${API_URL}/api/lifestyle/upload`;
+
+        await axios.post(url, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
 
       setFile(null);
       setThumbnail(null);
@@ -351,3 +393,4 @@ export default function UploadForm({ type, onUpload }) {
     </>
   );
 }
+
