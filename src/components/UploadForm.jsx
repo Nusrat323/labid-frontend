@@ -180,7 +180,6 @@ export default function UploadForm({ type, onUpload }) {
 
 
 
-
 import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -197,6 +196,8 @@ export default function UploadForm({ type, onUpload }) {
   const UPLOAD_PRESET = import.meta.env.VITE_CLOUD_UPLOAD_PRESET;
   const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
 
+  const MAX_VIDEO_SIZE_MB = 200; // Cloudinary free tier limit
+
   const handleFileChange = (e) => setFile(e.target.files[0]);
   const handleThumbnailChange = (e) => setThumbnail(e.target.files[0]);
   const handleRemoveFile = () => setFile(null);
@@ -209,10 +210,17 @@ export default function UploadForm({ type, onUpload }) {
     if (type === "video" && !thumbnail) return toast.warning("Please upload a thumbnail.");
     if (!category && type !== "lifestyle") return toast.warning("Please select a category.");
 
+    // 🚨 Warn if video is too large
+    if (type === "video") {
+      const sizeMB = file.size / (1024 * 1024);
+      if (sizeMB > MAX_VIDEO_SIZE_MB) {
+        return toast.error(`Video too large! Max allowed: ${MAX_VIDEO_SIZE_MB}MB`);
+      }
+    }
+
     try {
       setUploading(true);
 
-      // 1️⃣ Video upload handled differently
       if (type === "video") {
         // Upload video
         const videoData = new FormData();
@@ -247,6 +255,7 @@ export default function UploadForm({ type, onUpload }) {
         };
 
         await axios.post(`${API_URL}/api/videos/metadata`, metadata);
+
       } else {
         // Photo or lifestyle upload
         const formData = new FormData();
@@ -393,4 +402,5 @@ export default function UploadForm({ type, onUpload }) {
     </>
   );
 }
+
 
