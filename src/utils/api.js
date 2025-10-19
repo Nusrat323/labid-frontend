@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://labid-backend.vercel.app/api";
+const API_URL = "https://labid-backend-4m17qfvd9-nusrat323s-projects.vercel.app/api";
 
 export const getPhotos = async () => axios.get(`${API_URL}/photos`);
 export const uploadPhoto = async (formData) =>
